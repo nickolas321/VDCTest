@@ -17,11 +17,6 @@ public class SearchResultPage extends WebActions {
         PageFactory.initElements(driver, this);
     }
 
-    @FindBy(xpath = "//a[contains(text(),' Thanh pho Ho Chi Minh, VN')]")
-    protected WebElement Khongdau;
-
-    @FindBy(xpath = "//a[contains(text(),' Thành phố Hồ Chí Minh, VN')]")
-    protected WebElement Codau;
 
     @FindBy(xpath = "//div[contains(text(),'Not found')]")
     protected WebElement NoResultFound;

@@ -13,8 +13,8 @@ public class Homepage extends WebActions {
         PageFactory.initElements(driver, this);
     }
 
-//    @FindBy(xpath = "//div[@id='desktop-menu']//input[@placeholder='Weather in your city']")
-//    protected WebElement searchField;
+    @FindBy(xpath = "//div[@id='desktop-menu']//input[@placeholder='Weather in your city']")
+    protected WebElement searchField;
 
     protected WebElement searchField() {
         return findWebElement(By.xpath("//div[@id='desktop-menu']//input[@placeholder='Weather in your city']"));
@@ -25,9 +25,15 @@ public class Homepage extends WebActions {
         waitPageReady();
     }
 
+//    public void SearchbyTerm(String terms) {
+//        waitForElementPresent(searchField());
+//        inputBySendKeys(searchField(), terms);
+//        searchField().sendKeys(Keys.ENTER);
+//    }
+
     public void SearchbyTerm(String terms) {
-        waitForElementPresent(searchField());
-        inputBySendKeys(searchField(), terms);
+        waitForElementPresent(searchField);
+        inputBySendKeys(searchField, terms);
         searchField().sendKeys(Keys.ENTER);
     }
 

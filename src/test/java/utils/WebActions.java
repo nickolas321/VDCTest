@@ -1,14 +1,8 @@
 package utils;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
-
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.*;
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -36,11 +30,6 @@ public class WebActions {
         if (driver != null) {
             driver.close();
         }
-    }
-
-    protected void verifyNavigateToWebAddress(String expectedAdress) {
-        String currentAddress = driver.getCurrentUrl();
-        compareText(currentAddress, expectedAdress);
     }
 
     public void refreshPage() {
@@ -110,43 +99,6 @@ public class WebActions {
     }
 
 
-    protected void clickOnLink(WebElement element, String eleName) {
-        try {
-            waitElementClickable(element);
-            highlightElement(element);
-            element.click();
-            //    logger.info(String.format("Clicked on [%s] link successfully", eleName));
-        } catch (Exception ex) {
-            Assert.assertFalse(ex.getMessage(), true);
-        }
-    }
-
-    protected void clickByAction(WebElement element, String eleName) {
-        try {
-            waitElementClickable(element);
-            Actions action = new Actions(driver);
-            action.moveToElement(element).click().build().perform();
-            //	logger.info(String.format("Clicked on [%s] button successfully", eleName));
-        } catch (Exception ex) {
-            Assert.assertFalse(ex.getMessage(), true);
-        }
-    }
-
-    protected void clickByUsingJS(WebElement element, String msg) {
-        try {
-//            scrollToElement(element);
-            highlightElement(element);
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
-        } catch (Exception ex) {
-            Assert.assertFalse(ex.getMessage(), true);
-        }
-    }
-
-
-
-
-
-
 
     protected void inputBySendKeys(WebElement element, String strInput) {
         try {
@@ -157,30 +109,6 @@ public class WebActions {
             System.out.println(String.format("Enter value %s into the text field", strInput));
         } catch (Exception ex) {
             Assert.fail(ex.getMessage());
-        }
-    }
-
-    protected void inputByAction(WebElement element, String strInput, String eName) {
-        try {
-            waitElementVisible(element);
-            Actions actions = new Actions(driver);
-            actions.click(element);
-           actions.keyDown(Keys.CONTROL).sendKeys("a").keyUp(Keys.CONTROL).sendKeys(Keys.DELETE).build().perform();
-            actions.click(element).sendKeys(strInput).build().perform();
-        } catch (Exception ex) {
-            Assert.fail(ex.getMessage());
-        }
-    }
-
-
-
-    protected boolean waitForElementVisibleWithTimeoutSecond(WebElement element, int second) {
-        try {
-            new WebDriverWait(driver, second).until(ExpectedConditions.visibilityOf(element));
-            return true;
-        } catch (NoSuchElementException | NullPointerException | TimeoutException ex) {
-
-            return false;
         }
     }
 
@@ -233,58 +161,6 @@ public class WebActions {
     }
 
 
-
-
-    protected void isTextDisplayed(WebElement element, String expectedText, String elementName) {
-        try {
-            WebDriverWait driverWait = new WebDriverWait(driver, defaultWaitingTime);
-            driverWait.until(ExpectedConditions.visibilityOf(element));
-            highlightElement(element);
-            String actualText = element.getText();
-            Assert.assertEquals(expectedText.trim().toUpperCase(), actualText.trim().toUpperCase());
-        } catch (Exception e) {
-            Assert.fail(String.format("Unable to identify the %s . ERROR: %s", elementName, e.getMessage()));
-        }
-    }
-
-
-
-    protected void isCssValueDisplayed(WebElement element, String cssValue, String expectedText, String elementName) {
-        try {
-            WebDriverWait driverWait = new WebDriverWait(driver, defaultWaitingTime);
-            driverWait.until(ExpectedConditions.visibilityOf(element));
-            highlightElement(element);
-            String actualText = element.getCssValue(cssValue);
-            Assert.assertEquals(expectedText.trim().toUpperCase(), actualText.trim().toUpperCase());
-        } catch (Exception e) {
-            Assert.fail(String.format("Unable to identify the %s . ERROR: %s", elementName, e.getMessage()));
-        }
-    }
-
-    protected void isTextDisplayed(By by, String expectedText, String elementName) {
-        try {
-            WebDriverWait driverWait = new WebDriverWait(driver, defaultWaitingTime);
-            WebElement element = driver.findElement(by);
-            driverWait.until(ExpectedConditions.visibilityOf(element));
-            highlightElement(element);
-            String actualText = element.getText();
-            Assert.assertEquals(expectedText.trim().toUpperCase(), actualText.trim().toUpperCase());
-        } catch (Exception e) {
-            Assert.fail(String.format("Unable to identify the %s . ERROR: %s", elementName, e.getMessage()));
-        }
-    }
-
-    protected void isTextContain(WebElement element, String containedText, String elementName) {
-        try {
-            waitElementVisible(element);
-            highlightElement(element);
-            String actualText = element.getText();
-            Assert.assertThat(actualText.toUpperCase(), CoreMatchers.containsString(containedText.toUpperCase()));
-        } catch (Exception e) {
-            Assert.fail(element.getText() + "is NOT contained " + containedText);
-        }
-    }
-
     protected String getText(WebElement element, String elementName) {
         try {
             waitElementVisible(element);
@@ -293,30 +169,6 @@ public class WebActions {
         } catch (NoSuchElementException e) {
             Assert.fail(String.format("The element %s is not existing", elementName));
             return "";
-        }
-    }
-
-    protected void compareAttributeEqualValue(WebElement element, String attribute, String expectedText, String elementName) {
-        try {
-            WebDriverWait driverWait = new WebDriverWait(driver, defaultWaitingTime);
-            driverWait.until(ExpectedConditions.visibilityOf(element));
-            highlightElement(element);
-            String actualText = element.getAttribute(attribute);
-            Assert.assertEquals(expectedText.trim().toUpperCase(), actualText.trim().toUpperCase());
-        } catch (Exception e) {
-            Assert.assertFalse(String.format("Unable to identify the %s . ERROR: %s", elementName, e.getMessage()), true);
-        }
-    }
-
-    protected void compareAttributeContainValue(WebElement element, String attribute, String expectedText, String elementName) {
-        try {
-            WebDriverWait driverWait = new WebDriverWait(driver, defaultWaitingTime);
-            driverWait.until(ExpectedConditions.visibilityOf(element));
-            highlightElement(element);
-            String actualText = element.getAttribute(attribute).toUpperCase();
-            Assert.assertThat(actualText, CoreMatchers.containsString(expectedText.toUpperCase()));
-        } catch (Exception e) {
-            Assert.assertFalse(String.format("Unable to identify the %s . ERROR: %s", elementName, e.getMessage()), true);
         }
     }
 
@@ -376,14 +228,6 @@ public class WebActions {
         }
     }
 
-    protected boolean isElementPresentWithTimeout(By locator, int timeout) {
-        try {
-            Wait<WebDriver> wait = new FluentWait<WebDriver>(driver).withTimeout(Duration.ofSeconds(timeout)).pollingEvery(Duration.ofSeconds(1)).ignoring(NoSuchElementException.class, ElementNotVisibleException.class).ignoring(TimeoutException.class, InvalidElementStateException.class);
-            return wait.until(conditions -> driver.findElement(locator).isDisplayed());
-        } catch (Exception ex) {
-            return false;
-        }
-    }
 
     protected WebElement findWebElement(By by) {
         WebElement webElement = null;
@@ -398,139 +242,6 @@ public class WebActions {
         return webElement;
     }
 
-    protected WebElement findWebElement(By by, int timeoutInSeconds) {
-        WebElement webElement = null;
-        try {
-            driver.manage().timeouts().implicitlyWait(timeoutInSeconds, TimeUnit.SECONDS);
-            webElement = driver.findElement(by);
-            driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
-        return webElement;
-    }
-
-    protected List<WebElement> findListWebElement(By by) {
-        List<WebElement> listWebElement = null;
-        try {
-            driver.manage().timeouts().implicitlyWait(1, TimeUnit.MINUTES);
-            listWebElement = driver.findElements(by);
-            driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
-        } catch (Exception e) {
-            return null;
-        }
-        return listWebElement;
-    }
-
-    protected boolean waitForElementPresent(By by) {
-        try {
-            for (int second = 0; ; second++) {
-                if (second >= 2) {
-                    Assert.assertFalse("Timeout", false);
-                }
-                try {
-                    if (isElementPresent(by)) {
-                        highlightElement(by);
-                        break;
-                    }
-                } catch (Exception e) {
-                    System.out.println(String.format("Waiting for %s second...", second));
-                }
-            }
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    protected void waitForElementsPresent(By by) {
-        try {
-            for (int i = 0; ; i++) {
-                System.out.println(String.format("Waiting for %s second", i));
-                if (i >= 6) {
-                    Assert.assertSame("TIMEOUT", "60s", "> 600s");
-                    break;
-                }
-                List<WebElement> elements = driver.findElements(by);
-                if (elements.size() > 0) {
-                    break;
-                } else {
-                    continue;
-                }
-            }
-
-        } catch (Exception e) {
-            Assert.fail(e.getMessage());
-        }
-    }
-
-    protected void waitForElementsPresent(List<WebElement> listEle) {
-        try {
-            for (int i = 0; ; i++) {
-                System.out.println(String.format("Waiting for %s second", i));
-                if (i >= 6) {
-                    Assert.assertSame("TIMEOUT", "60s", "> 600s");
-                    break;
-                }
-                if (listEle.size() > 0) {
-                    break;
-                }
-            }
-
-        } catch (Exception e) {
-            Assert.fail(e.getMessage());
-        }
-    }
-
-    protected void compareText(String actual, String expected) {
-        if (actual.equalsIgnoreCase(expected)) {
-            System.out.println(String.format("Actual: %s is EQUAL Expected: %s", actual, expected));
-        } else {
-            Assert.fail("Actual Text: " + actual + " is NOT equal to Expected Text: " + expected);
-        }
-    }
-
-    protected void compareTextContain(String actual, String expected) {
-        if (actual.toUpperCase().trim().contains(expected.toUpperCase().trim())) {
-
-            // logger.info(actual + "is CONTAINS with " + expected);
-        } else {
-            Assert.fail("Actual string : " + actual + "does NOT contains sub string: " + expected);
-        }
-    }
-
-    protected void compareText(WebElement element, String expected) {
-        String actual = getText(element, "");
-        if (actual.equalsIgnoreCase(expected)) {
-            highlightElement(element);
-            System.out.println(String.format("Actual: %s is EQUAL Expected: %s", actual, expected));
-        } else {
-            Assert.fail("Actual Text: " + actual + " is NOT equal to Expected Text: " + expected);
-        }
-    }
-
-    protected void compareTextContain(WebElement element, String expected) {
-        String actual = getText(element, "");
-
-        if (actual.toUpperCase().trim().contains(expected.toUpperCase().trim())) {
-            highlightElement(element);
-            System.out.println(String.format("Actual: %s is contains Expected: %s", actual, expected));
-        } else {
-            Assert.fail("Actual string : " + actual + "does NOT contains sub string: " + expected);
-        }
-    }
-
-
-    protected void uploadFileUsingSendkeys(WebElement element, String filePath, String eleName) {
-        try {
-            element.sendKeys(filePath);
-        } catch
-        (Exception e) {
-            Assert.fail(e.getMessage());
-        }
-    }
-
     public boolean isElementNOTExisting(WebElement element) {
         if(!element.isDisplayed()) {
             return true;
@@ -540,27 +251,5 @@ public class WebActions {
         }
     }
 
-    public void closeAndSwitchToNextTab() {
-        driver.close();
-        ArrayList<String> tab = new ArrayList<>(driver.getWindowHandles());
-        driver.switchTo().window(tab.get(0));
-    }
-
-    public void switchToPreviousTab() {
-        ArrayList<String> tab = new ArrayList<>(driver.getWindowHandles());
-        driver.switchTo().window(tab.get(0));
-    }
-
-    public void closeTabAndReturn() {
-        driver.close();
-        ArrayList<String> tab = new ArrayList<>(driver.getWindowHandles());
-        driver.switchTo().window(tab.get(0));
-    }
-
-    public void switchToPreviousTabAndClose() {
-        ArrayList<String> tab = new ArrayList<>(driver.getWindowHandles());
-        driver.switchTo().window(tab.get(1));
-        driver.close();
-    }
 
 }

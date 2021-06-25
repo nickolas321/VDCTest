@@ -42,17 +42,7 @@ public class FileHelper {
         return configProp;
     }
 
-    public static Properties readPropertiesByFilePath(String path) {
-        Properties prop = new Properties();
-        try {
-            prop = new Properties();
-            InputStream input = new FileInputStream(new File(path));
-            prop.load(input);
-        } catch (Exception e) {
-            System.out.println("Unable to load Config.properties file. ERROR: " + e.getMessage());
-        }
-        return prop;
-    }
+
 
     public static String getConfigValue(String key) {
         return configProp.getProperty(key);
@@ -79,13 +69,6 @@ public class FileHelper {
         }
     }
 
-    public static void copyFile(File source, File dest) {
-        try {
-            FileUtils.copyFile(source, dest);
-        } catch (IOException e) {
-            System.err.format("EXCEPTION: " + e.getMessage());
-        }
-    }
 
     public static List<File> listFileOnDir(String directoryName) {
         File directory = new File(directoryName);
